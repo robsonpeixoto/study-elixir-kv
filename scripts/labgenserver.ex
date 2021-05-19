@@ -1,4 +1,4 @@
-defmodule TimeoutGenServer do
+defmodule LabGenServer do
   use GenServer
   # Server (callbacks)
   @impl true
@@ -20,7 +20,7 @@ defmodule TimeoutGenServer do
 end
 
 # Start the server
-{:ok, pid} = GenServer.start_link(TimeoutGenServer, "", timeout: 1_000)
+{:ok, pid} = GenServer.start_link(LabGenServer, "", timeout: 1_000)
 IO.inspect(pid)
 
 # This is the client
