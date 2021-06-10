@@ -8,9 +8,11 @@ defmodule KV.Supervisor do
   @impl Supervisor
   def init(:ok) do
     children = [
+      {DynamicSupervisor, name: KV.BucketSupervisor, strategy: :one_for_one},
+      # KV.Registry requires KV.BucketSupervisor
       {KV.Registry, name: KV.Registry}
     ]
 
-    Supervisor.init(children, strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_all)
   end
 end
