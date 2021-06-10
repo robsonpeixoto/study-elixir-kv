@@ -9,7 +9,10 @@ defmodule KVServer do
     # 4. `reuseaddr: true` - alow us to reuse the address if the listener crashes
 
     {:ok, socket} =
-      :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true])
+      :gen_tcp.listen(
+        port,
+        [:binary, packet: :line, active: false, reuseaddr: true]
+      )
 
     Logger.info("Accepting connections on port #{port}")
     loop_acceptor(socket)
