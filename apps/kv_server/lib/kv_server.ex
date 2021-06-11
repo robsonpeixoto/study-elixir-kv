@@ -30,7 +30,6 @@ defmodule KVServer do
       with {:ok, data} <- read_line(socket),
            {:ok, command} <- KVServer.Command.parse(data),
            do: KVServer.Command.run(command)
-      end
 
     write_line(socket, msg)
     serve(socket)
@@ -52,6 +51,10 @@ defmodule KVServer do
   defp write_line(_socket, {:error, :closed}) do
     # The connection was closed, exit politely
     exit(:shutdown)
+  end
+
+  defp write_line(socket, {:error, :not_found}) do
+    :gen_tcp.send(socket, "NOT FOUND\r\n")
   end
 
   defp write_line(socket, {:error, error}) do
