@@ -19,6 +19,7 @@ defmodule KV.MixProject do
   def application do
     [
       extra_applications: [:logger],
+      env: [routing_table: []],
       # allow the KV module execute a application callback
       mod: {KV, []}
     ]
