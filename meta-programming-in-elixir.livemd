@@ -1,0 +1,151 @@
+# Quote and unquote
+
+## Quoting
+
+`quote` sempre retorna uma tupla de 3 posição:
+
+1. nome da função
+2. metadados
+3. argumentos da função
+
+```elixir
+quote do: sum(1, 2, 3)
+```
+
+```elixir
+quote do: 1 + 2
+```
+
+```elixir
+quote do: %{1 => 2}
+```
+
+```elixir
+# mas no caso de variável, a última posição não é o argumento
+quote do: x
+```
+
+```elixir
+quote do: sum(1, 2 + 3, 4)
+```
+
+```elixir
+Macro.to_string(quote do: sum(1, 2 + 3, 4))
+```
+
+Normalmente o quote retorna o seguinte formato:
+
+`{atom | tuple, list, list | atom}`
+
+1º) é um atom ou outra tupla nesse formato
+
+2º) é uma keywork list com metadados como números e contextos
+
+3º) é uma lista de argumentos quando o primeiro for uma função, ou um atom quando o primeiro for uma variável
+
+Existem literais que o quote retorna o próprio elemento:
+
+```elixir
+IO.puts("Atoms")
+quote do: :sum
+```
+
+```elixir
+IO.puts("Numbers")
+quote do: 1.0
+```
+
+```elixir
+IO.puts("Lists")
+quote do: [1, 2]
+```
+
+```elixir
+IO.puts("Strings")
+quote do: "strings"
+```
+
+```elixir
+IO.puts("Tuples with two elements")
+quote do: {1, 2}
+```
+
+```elixir
+quote do: String.upcase("foo")
+```
+
+```elixir
+quote do: if(true, do: :this, else: :that)
+```
+
+```elixir
+quote do: if(true) do
+  :this
+else
+  :that
+end
+```
+
+```elixir
+quote do:
+        (if true do
+           :this
+         else
+           :that
+         end)
+```
+
+### Unquoting
+
+```elixir
+number = 13
+Macro.to_string(quote do: 11 + number)
+```
+
+```elixir
+number = 13
+Macro.to_string(quote do: 11 + unquote(number))
+```
+
+```elixir
+fun = :hello
+Macro.to_string(quote do: unquote(fun)(:world))
+```
+
+```elixir
+inner = [3, 4, 5]
+Macro.to_string(quote do: [1, 2, unquote_splicing(inner), 6])
+```
+
+```elixir
+quote do: %{1 => 2}
+```
+
+```elixir
+map = %{hello: :world}
+Macro.escape(map)
+```
+
+```elixir
+map = %{hello: :world}
+quote do: map
+```
+
+**OBS:** alguns elementos não podem ser explicitamente convertidos para quote:
+
+```elixir
+pid = spawn(fn -> 1 end)
+Macro.escape(pid)
+```
+
+###
+
+```elixir
+defmodule X do
+  def f do
+    10
+  end
+end
+
+Macro.escape(X.f())
+```
