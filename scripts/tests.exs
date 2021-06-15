@@ -49,3 +49,13 @@ defmodule TestCase do
     end
   end
 end
+
+defmodule MyTest do
+  use TestCase
+
+  test "hello" do
+    "hello" = "world"
+  end
+end
+
+MyTest.run()
