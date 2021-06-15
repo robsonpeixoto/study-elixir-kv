@@ -16,3 +16,19 @@ import Config
 #       format: "$date $time [$level] $metadata$message\n",
 #       metadata: [:user_id]
 #
+
+case Mix.env() do
+  :prod ->
+    config :kv, :routing_table, [
+      {?a..?m, :foo@updated2019},
+      {?n..?z, :bar@updated2019}
+    ]
+
+  :test ->
+    config :kv, :routing_table, [{?a..?z, node()}]
+
+  :dev ->
+    config :kv, :routing_table, [{?a..?z, node()}]
+end
+
+# config :kv, :routing_table, [{?a..?z, node()}]
